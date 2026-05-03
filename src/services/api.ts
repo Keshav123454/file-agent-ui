@@ -26,3 +26,17 @@ export const sendMessage = async (
 
   return response.data;
 };
+
+export const getFiles = async () => {
+  const response = await api.get("/files"); // adjust endpoint if needed
+  return response.data;
+};
+
+export const deleteFile = async (fileId: string) => {
+  try {
+    const response = await api.delete(`/files/${fileId}`);
+    return response.data;
+  } catch (error: any) {
+    throw error?.response?.data || { message: "Delete failed" };
+  }
+};
