@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFiles } from "../services/api";
+import { getFiles, deleteFile } from "../services/api";
 
 type FileType = {
   id: string;
@@ -50,6 +50,21 @@ const FileSelector = ({ onSelect }: Props) => {
     onSelect(file);
   };
 
+  const handleDelete = async (fileId: string) => {
+    try {
+      await deleteFile(fileId);
+
+      setFiles((prev) => prev.filter((f) => f.id !== fileId));
+
+      if (selectedId === fileId) {
+        setSelectedId("");
+      }
+    } catch (error) {
+      console.error("Delete failed", error);
+      alert("Failed to delete file");
+    }
+  };
+
   return (
     <div>
       <h3>Select File</h3>
@@ -65,10 +80,26 @@ const FileSelector = ({ onSelect }: Props) => {
                 cursor: "pointer",
                 fontWeight: selectedId === file.id ? "bold" : "normal",
                 padding: "4px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
               onClick={() => handleSelect(file)}
             >
-              {file.name}
+              <span>{file.name}</span>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // 🔥 prevents select
+                  handleDelete(file.id);
+                }}
+                style={{
+                  color: "red",
+                  cursor: "pointer",
+                }}
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
