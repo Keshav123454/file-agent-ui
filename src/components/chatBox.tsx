@@ -76,8 +76,8 @@ const ChatBox = () => {
             Selected File:{" "}
             <strong>
               {selectedFile.name} (
-              {selectedFile.id.length > 6
-                ? selectedFile.id.slice(-6)
+              {selectedFile.id.length > 4
+                ? selectedFile.id.slice(-4)
                 : selectedFile.id}
               )
             </strong>
